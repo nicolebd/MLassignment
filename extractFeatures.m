@@ -60,7 +60,7 @@ function [F_x F_y pos] = extractFeatures(data)
     end
     j = 1;
     for i = 1:count
-          while F_x(j, 1) != 0
+          while F_x(j, 1) ~= 0
             j = j + 1;
           end
           if F_x(j, 1) == 0
