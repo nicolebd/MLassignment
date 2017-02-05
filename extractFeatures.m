@@ -11,7 +11,7 @@ function [F_x F_y pos] = extractFeatures(data)
     angle = 0;
     
     F_x = zeros(l, 4);
-    F_y = zeros(l, 5);
+    F_y = zeros(l, 2);
     pos = zeros(l, 2);
     
     % extract features and populate F_x and F_y
@@ -23,10 +23,10 @@ function [F_x F_y pos] = extractFeatures(data)
             i = i + 1;
           end
             
-          t = data(marker, 1)*0.01;
+          t = data(marker, 1)*0.1;
           
           %extract horizontal velocity which is constant (vx = x/t)
-          vx = data(i-1, 2)/(0.01*data(i-1, 1)); 
+          vx = data(i-1, 2)/(0.1*data(i-1, 1)); 
 
           %extract intitial vertical velocity (y = vy0*t - 0.5*g*t^2)          
           vy = (data(marker, 3) + 0.5*9.8*t*t)/t;
@@ -39,10 +39,11 @@ function [F_x F_y pos] = extractFeatures(data)
           
           %populate X and pos
           for j = marker:i - 1
-              t = data(j,1)*0.01;
+              t = data(j,1)*0.1;
+              x = data(j,2);
               F_x(j, :) = [angle t  vx t*vx];
-              F_y(j,:) = [angle vy t t*t vy*t];
-              pos(j, :) = [data(j, 2) data(j, 3)]; 
+              F_y(j,:) = [t*t vy*t];
+              pos(j, :) = [x data(j, 3)]; 
           end
           
           %update marker to point to the next projectile
