@@ -55,6 +55,7 @@ fprintf('\n');
 
 ch = input('Press enter to test sample input or press [q] to quit. ', 's');
 c = 0; % file number to be written to
+name = 'predicted_data_'; % file name prefix
 while isempty(ch) || ch ~= 'q'
   c = c + 1;
   u = input('Please enter the initial velocity (m/s): ');
