@@ -54,18 +54,20 @@ fprintf(' %f \n', thetay);
 fprintf('\n');
 
 ch = input('Press enter to test sample input or press [q] to quit. ', 's');
-
+c = 0; % file number to be written to
 while isempty(ch) || ch ~= 'q'
+  c = c + 1;
   u = input('Please enter the initial velocity (m/s): ');
   angle = input('Please enter the angle (degrees): ');
 
   angle = angle * pi/180; % converting to radians
   vx0 = u*cos(angle);
   vy0 = u*sin(angle);
-
+  
   fprintf('\n[t],  [x],       [y]');
   fprintf('\n%d, %f, %f', 0,0,0);
   % Estimate the points
+  values = zeros(1,3); % stores predicted (t, x, y) values
   for i = 1:100
     xpred = [angle i*0.1 vx0 i*0.1*vx0];
     xpred = (xpred - mu_x)./sigma_x;
@@ -81,8 +83,12 @@ while isempty(ch) || ch ~= 'q'
     if (y < 0)
       break;
     end
+    values(i+1,:) = [i x y];
     fprintf('\n%d, %f, %f', i,x,y);
   end
+  % write to csv file
+  filename = [name num2str(c) '.csv'];
+  csvwrite(filename, values);
   fprintf('\n\n');
   ch = input('Press enter to continue testing or press [q] to quit. ','s');
 end
