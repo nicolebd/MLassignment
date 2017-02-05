@@ -32,7 +32,7 @@ num_iters = 10000;
 thetax = zeros(5, 1);
 [thetax, J_x] = gradientDescent(Fx, pos(:,1), thetax, alpha, num_iters);
 
-thetay = zeros(6, 1);
+thetay = zeros(3, 1);
 [thetay, J_y] = gradientDescent(Fy, pos(:,2), thetay, alpha, num_iters);
 
 % Plot the convergence graph for x and y
@@ -53,33 +53,39 @@ fprintf('Theta_y: \n');
 fprintf(' %f \n', thetay);
 fprintf('\n');
 
-u = input('Please enter the initial velocity (m/s): ');
-angle = input('Please enter the angle (degrees): ');
+ch = input('Press enter to test sample input or press [q] to quit. ',
+    's');
 
-angle = angle * pi/180; % converting to radians
-vx0 = u*cos(angle);
-vy0 = u*sin(angle);
+while isempty(ch) || ch ~= 'q'
+  u = input('Please enter the initial velocity (m/s): ');
+  angle = input('Please enter the angle (degrees): ');
 
-fprintf('\n[t],  [x],       [y]');
-fprintf('\n%d, %f, %f', 0,0,0);
-% Estimate the points
-for i = 1:100
-  xpred = [angle i*0.01 vx0 i*0.01*vx0];
-  xpred = (xpred - mu_x)./sigma_x;
-  xpred = [1 xpred];
+  angle = angle * pi/180; % converting to radians
+  vx0 = u*cos(angle);
+  vy0 = u*sin(angle);
+
+  fprintf('\n[t],  [x],       [y]');
+  fprintf('\n%d, %f, %f', 0,0,0);
+  % Estimate the points
+  for i = 1:100
+    xpred = [angle i*0.1 vx0 i*0.1*vx0];
+    xpred = (xpred - mu_x)./sigma_x;
+    xpred = [1 xpred];
+    x = xpred*thetax;
   
-  ypred = [angle vy0 i*0.01 i*i*0.01*0.01 vy0*i*0.01];
-  ypred = (ypred - mu_y)./sigma_y;
-  ypred = [1 ypred];
+    ypred = [i*i*0.1*0.1 vy0*i*0.1];
+    ypred = (ypred - mu_y)./sigma_y;
+    ypred = [1 ypred];
+    y = ypred*thetay;
   
-  x = xpred*thetax;
-  y = ypred*thetay;
-  
-  % if y is -ve stop, as projectile has reached the ground
-  if (y < 0)
-    break;
+    % if y is -ve stop, as projectile has reached the ground
+    if (y < 0)
+      break;
+    end
+    fprintf('\n%d, %f, %f', i,x,y);
   end
-  fprintf('\n%d, %f, %f', i,x,y);
+  fprintf('\n\n');
+  ch = input('Press enter to continue testing or press [q] to quit. ','s');
 end
 
 fprintf('\n');
