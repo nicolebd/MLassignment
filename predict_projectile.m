@@ -53,8 +53,7 @@ fprintf('Theta_y: \n');
 fprintf(' %f \n', thetay);
 fprintf('\n');
 
-ch = input('Press enter to test sample input or press [q] to quit. ',
-    's');
+ch = input('Press enter to test sample input or press [q] to quit. ', 's');
 
 while isempty(ch) || ch ~= 'q'
   u = input('Please enter the initial velocity (m/s): ');
