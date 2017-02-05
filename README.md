@@ -6,4 +6,5 @@ To run:
 2. Run predict_projectile.m script in Octave/MATLAB.
 3. Train regressor and supply initial velocity and angle when prompted.
 
+The predicted data are stored as csv files with the format predicted_data_<number>.csv
 Thank you!
